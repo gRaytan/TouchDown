@@ -9,6 +9,6 @@ public interface DetectionManager {
   void setOnSuccessListener(OnSuccessListener listener);
 
   interface OnSuccessListener {
-    void onSuccess(PersonDetails details);
+    void onSuccess(PersonDetails details, Bitmap source);
   }
 }

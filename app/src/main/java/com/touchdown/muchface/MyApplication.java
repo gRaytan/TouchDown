@@ -9,7 +9,6 @@ import com.touchdown.muchface.domain.DetectionManager;
 import com.touchdown.muchface.domain.FaceDetector;
 import com.touchdown.muchface.domain.FaceDetectorImpl;
 import com.touchdown.muchface.domain.PersonDetails;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -75,7 +74,7 @@ public class MyApplication extends Application {
         PersonDetails details = getFaceDetector().getDetails(bitmap);
         if (mListener != null && issueTime > mLastFireTime) {
           mLastFireTime = System.currentTimeMillis();
-          mListener.onSuccess(details);
+          mListener.onSuccess(details, bitmap);
         }
       } catch (Exception e) {
         Log.w(LOG_TAG, "failed detecting bitmap", e);

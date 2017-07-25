@@ -2,7 +2,6 @@ package com.touchdown.muchface.live.facedetectcamera.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -24,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import com.touchdown.muchface.MyApplication;
-import com.touchdown.muchface.PersonInfo;
+import com.touchdown.muchface.PersonDetailsActivity;
 import com.touchdown.muchface.R;
 import com.touchdown.muchface.domain.DetectionManager;
 import com.touchdown.muchface.domain.PersonDetails;
@@ -202,11 +201,10 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
       private boolean fired = false;
 
       @Override
-      public void onSuccess(PersonDetails details) {
+      public void onSuccess(PersonDetails details, Bitmap source) {
         synchronized (mDetectionManager) {
           if (!fired) {
-            Intent myIntent = new Intent(FaceDetectGrayActivity.this, PersonInfo.class);
-            startActivity(myIntent);
+            PersonDetailsActivity.startActivity(FaceDetectGrayActivity.this, details, source);
           }
           fired = true;
         }
