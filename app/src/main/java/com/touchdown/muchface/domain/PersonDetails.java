@@ -41,4 +41,51 @@ public class PersonDetails {
   public Date getBirthDate() {
     return birthDate;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PersonDetails that = (PersonDetails) o;
+
+    if (name != null ? !name.equals(that.name) : that.name != null) return false;
+    if (ssn != null ? !ssn.equals(that.ssn) : that.ssn != null) return false;
+    if (imageUrl != null ? !imageUrl.equals(that.imageUrl) : that.imageUrl != null) return false;
+    if (birthDate != null ? !(birthDate.getTime() == that.birthDate.getTime())
+        : that.birthDate != null) {
+      return false;
+    }
+    return description != null ? description.equals(that.description) : that.description == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = name != null ? name.hashCode() : 0;
+    result = 31 * result + (ssn != null ? ssn.hashCode() : 0);
+    result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
+    result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
+    result = 31 * result + (description != null ? description.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "PersonDetails{"
+        + "name='"
+        + name
+        + '\''
+        + ", ssn='"
+        + ssn
+        + '\''
+        + ", imageUrl='"
+        + imageUrl
+        + '\''
+        + ", birthDate="
+        + birthDate
+        + ", description='"
+        + description
+        + '\''
+        + '}';
+  }
 }
