@@ -34,12 +34,12 @@ public class PersonDetailsActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        mNameText = (TextView) findViewById(R.id.textview_name);
-        mProfileImage = (ImageView) findViewById(R.id.server_img);
-        mSourceImage = (ImageView) findViewById(R.id.selfie);
-        mSsnText = (TextView) findViewById(R.id.ssn_text_view);
-        mBirthDayText = (TextView) findViewById(R.id.birth_date);
-        mDescriptionText = (TextView) findViewById(R.id.description);
+        mNameText = (TextView) findViewById(R.id.details_name);
+        mProfileImage = (ImageView) findViewById(R.id.details_profile);
+        mSourceImage = (ImageView) findViewById(R.id.details_source_image);
+        mSsnText = (TextView) findViewById(R.id.details_ssn);
+        mBirthDayText = (TextView) findViewById(R.id.details_birth_date);
+        mDescriptionText = (TextView) findViewById(R.id.details_description);
     }
 
     private void updateDataFromIntent() {

@@ -1,77 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.touchdown.muchface.PersonDetailsActivity">
 
     <TextView
-        android:id="@+id/textview_name"
+        android:id="@+id/details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="Donald Trump"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="@dimen/font_size" />
 
     <LinearLayout
-        android:id="@+id/photos"
         android:layout_width="match_parent"
-        android:layout_height="250sp"
-        android:layout_below="@id/textview_name"
-        android:paddingTop="15dp">
+        android:layout_height="250dp"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/padding_normal">
 
         <ImageView
-            android:id="@+id/server_img"
-            android:layout_width="match_parent"
+            android:id="@+id/details_profile"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:layout_weight="1"
             android:src="@drawable/trump_server" />
 
         <ImageView
-            android:id="@+id/selfie"
-            android:layout_width="match_parent"
+            android:id="@+id/details_source_image"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:layout_weight="1"
             android:src="@drawable/trump_selfie_photo" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/ssn_text_view"
+        android:id="@+id/details_ssn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/photos"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="20dp"
+        android:paddingTop="@dimen/padding_normal"
         android:text="742775893"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="@dimen/font_size" />
 
     <TextView
-        android:id="@+id/birth_date"
+        android:id="@+id/details_birth_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ssn_text_view"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="5dp"
+        android:paddingTop="@dimen/padding_normal"
         android:text="June 14, 1946 (age 71)"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="@dimen/font_size" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/details_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/birth_date"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="5dp"
+        android:paddingTop="@dimen/padding_normal"
         android:text="Very nice man"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="@dimen/font_size" />
 
-</RelativeLayout>
+</LinearLayout>
