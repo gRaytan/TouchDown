@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">MuchFace</string>
+  <string name="open_camera">Open Camera</string>
+  <string name="title_activity_person_info">PersonInfo</string>
 </resources>
