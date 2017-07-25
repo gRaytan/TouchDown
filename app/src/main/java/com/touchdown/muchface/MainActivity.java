@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSendClick(View view) {
-        new DetectFaceAsyncTask().execute(mBitmap);
+        if (mBitmap != null) {
+            new DetectFaceAsyncTask().execute(mBitmap);
+        } else {
+            showErrorDialog("There is no image to recognize!");
+        }
     }
 
     @Override
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_TASK_OPERATION);
     }
 
+    private void showErrorDialog(String text) {
+        SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
+        dialog.setTitleText("Error");
+        dialog.setContentText(text);
+        dialog.show();
+    }
+
     private void showLoadingDialog() {
         mDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
@@ -62,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
         mDialog.dismissWithAnimation();
         if (personDetails != null) {
             openPersonDetailsActivity(personDetails);
+        } else {
+            mImageView.setImageDrawable(null);
+            mBitmap = null;
+            showErrorDialog("Could not recognize your face, sorry :(");
         }
     }
 
