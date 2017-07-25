@@ -2,6 +2,7 @@ package com.touchdown.muchface.live.facedetectcamera.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -22,7 +23,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import com.touchdown.muchface.MyApplication;
+import com.touchdown.muchface.PersonInfo;
 import com.touchdown.muchface.R;
+import com.touchdown.muchface.domain.DetectionManager;
+import com.touchdown.muchface.domain.PersonDetails;
 import com.touchdown.muchface.live.facedetectcamera.activity.ui.FaceOverlayView;
 import com.touchdown.muchface.live.facedetectcamera.adapter.ImagePreviewAdapter;
 import com.touchdown.muchface.live.facedetectcamera.model.FaceResult;
@@ -93,6 +98,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
   private RecyclerView recyclerView;
   private ImagePreviewAdapter imagePreviewAdapter;
   private ArrayList<Bitmap> facesBitmap;
+  private DetectionManager mDetectionManager;
 
   //==============================================================================================
   // Activity Methods
@@ -130,6 +136,8 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     }
 
     if (icicle != null) cameraId = icicle.getInt(BUNDLE_CAMERA_ID, 0);
+
+    mDetectionManager = ((MyApplication) getApplication()).getDetectionManager();
   }
 
   @Override
@@ -188,6 +196,22 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
 
     Log.i(TAG, "onResume");
     startPreview();
+
+    mDetectionManager.setOnSuccessListener(new DetectionManager.OnSuccessListener() {
+
+      private boolean fired = false;
+
+      @Override
+      public void onSuccess(PersonDetails details) {
+        synchronized (mDetectionManager) {
+          if (!fired) {
+            Intent myIntent = new Intent(FaceDetectGrayActivity.this, PersonInfo.class);
+            startActivity(myIntent);
+          }
+          fired = true;
+        }
+      }
+    });
   }
 
   /**
@@ -199,6 +223,10 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     Log.i(TAG, "onPause");
     if (mCamera != null) {
       mCamera.stopPreview();
+    }
+
+    if (mDetectionManager != null) {
+      mDetectionManager.setOnSuccessListener(null);
     }
   }
 
@@ -572,6 +600,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
 
   private void sendCropForRecognition(Bitmap faceCroped) {
     Log.d("Balagan", "sending cropped image for recognition");
+    mDetectionManager.send(faceCroped);
   }
 
   /**
