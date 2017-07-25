@@ -129,11 +129,6 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
       faces_previous[i] = new FaceResult();
     }
 
-    getSupportActionBar().setDisplayShowTitleEnabled(true);
-    getSupportActionBar().setHomeButtonEnabled(true);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setTitle("Face Detect Gray");
-
     if (icicle != null) cameraId = icicle.getInt(BUNDLE_CAMERA_ID, 0);
   }
 
@@ -521,7 +516,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
               facesCount.put(idFace, 0);
             } else {
               int count = facesCount.get(idFace) + 1;
-              if (count <= 5) facesCount.put(idFace, count);
+              facesCount.put(idFace, count);
 
               //
               // Crop Face to display in RecylerView
@@ -529,6 +524,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
               if (count == 5 || (count != 0 && count % 20 == 0)) {
                 faceCroped = ImageUtils.cropFace(faces[i], bitmap, rotate);
                 if (faceCroped != null) {
+                  FaceDetectGrayActivity.this.sendCropForRecognition(faceCroped);
                   handler.post(new Runnable() {
                     public void run() {
                       imagePreviewAdapter.add(faceCroped);
@@ -572,6 +568,10 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
         ptr++;
       }
     }
+  }
+
+  private void sendCropForRecognition(Bitmap faceCroped) {
+    Log.d("Balagan", "sending cropped image for recognition");
   }
 
   /**
