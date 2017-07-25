@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.touchdown.muchface.domain.PersonDetails;
 import com.touchdown.muchface.util.ApiUtils;
-import com.touchdown.muchface.util.Constants;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -69,22 +68,15 @@ public class MainActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    private void onDetailsArrived(PersonDetails personDetails) {
+    private void onDetailsArrived(PersonDetails details) {
         mDialog.dismissWithAnimation();
-        if (personDetails != null) {
-            openPersonDetailsActivity(personDetails);
+        if (details != null) {
+            PersonDetailsActivity.startActivity(MainActivity.this, details, mBitmap);
         } else {
             mImageView.setImageDrawable(null);
             mBitmap = null;
             showErrorDialog("Could not recognize your face, sorry :(");
         }
-    }
-
-    private void openPersonDetailsActivity(PersonDetails personDetails) {
-        Intent intent = new Intent(MainActivity.this, PersonDetailsActivity.class);
-        intent.putExtra(Constants.DETAILS_EXTRA, personDetails);
-        intent.putExtra(Constants.IMAGE_EXTRA, mBitmap);
-        MainActivity.this.startActivity(intent);
     }
 
     private class DetectFaceAsyncTask extends AsyncTask<Bitmap, Void, PersonDetails> {

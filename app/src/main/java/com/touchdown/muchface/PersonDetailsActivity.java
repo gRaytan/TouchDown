@@ -1,5 +1,7 @@
 package com.touchdown.muchface;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.touchdown.muchface.domain.PersonDetails;
-import com.touchdown.muchface.util.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,12 +19,21 @@ import java.net.URL;
 
 public class PersonDetailsActivity extends AppCompatActivity {
 
+    public static final String DETAILS_EXTRA = "details_extra";
+    public static final String IMAGE_EXTRA = "image_extra";
     private TextView mNameText;
     private ImageView mProfileImage;
     private ImageView mSourceImage;
     private TextView mSsnText;
     private TextView mBirthDayText;
     private TextView mDescriptionText;
+
+    public static void startActivity(Activity fromActivity, PersonDetails details, Bitmap bitmap) {
+        Intent intent = new Intent(fromActivity, PersonDetailsActivity.class);
+        intent.putExtra(DETAILS_EXTRA, details);
+        intent.putExtra(IMAGE_EXTRA, bitmap);
+        fromActivity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +62,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
     }
 
     private Bitmap extractSourceImage() {
-        return getIntent().getParcelableExtra(Constants.IMAGE_EXTRA);
+        return getIntent().getParcelableExtra(IMAGE_EXTRA);
     }
 
     private void updatePersonDetails() {
@@ -65,7 +75,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
     }
 
     private PersonDetails extractPersonDetails() {
-        return (PersonDetails) getIntent().getSerializableExtra(Constants.DETAILS_EXTRA);
+        return (PersonDetails) getIntent().getSerializableExtra(DETAILS_EXTRA);
     }
 
     private class LoadBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
