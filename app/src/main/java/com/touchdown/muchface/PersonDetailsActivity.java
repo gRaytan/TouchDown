@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 
 public class PersonDetailsActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info);
         initViews();
-        updateDataFromIntent();
+        updatePersonDetails();
     }
 
     private void initViews() {
@@ -52,30 +53,24 @@ public class PersonDetailsActivity extends AppCompatActivity {
         mDescriptionText = (TextView) findViewById(R.id.details_description);
     }
 
-    private void updateDataFromIntent() {
-        updateSourceImage();
-        updatePersonDetails();
-    }
-
-    private void updateSourceImage() {
-        mSourceImage.setImageBitmap(extractSourceImage());
-    }
-
-    private Bitmap extractSourceImage() {
-        return getIntent().getParcelableExtra(IMAGE_EXTRA);
-    }
-
     private void updatePersonDetails() {
         PersonDetails details = extractPersonDetails();
+        Bitmap bitmap = extractSourceImage();
         mSsnText.setText(details.getSsn());
-        mBirthDayText.setText(details.getBirthDate().toString());
+        String birthDate = new SimpleDateFormat("dd-MM-yyyy").format(details.getBirthDate());
+        mBirthDayText.setText(birthDate);
         mDescriptionText.setText(details.getDescription());
         mNameText.setText(details.getName());
+        mSourceImage.setImageBitmap(bitmap);
         new LoadBitmapFromUrl(mProfileImage).execute(details.getImageUrl());
     }
 
     private PersonDetails extractPersonDetails() {
         return (PersonDetails) getIntent().getSerializableExtra(DETAILS_EXTRA);
+    }
+
+    private Bitmap extractSourceImage() {
+        return getIntent().getParcelableExtra(IMAGE_EXTRA);
     }
 
     private class LoadBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {

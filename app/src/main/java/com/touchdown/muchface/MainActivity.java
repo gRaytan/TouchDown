@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mImageView = (ImageView) findViewById(R.id.photo_img_view);
+        mImageView = (ImageView) findViewById(R.id.captured_image);
     }
 
     public void onCameraClick(View view) {

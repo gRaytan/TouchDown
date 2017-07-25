@@ -25,6 +25,8 @@
             android:id="@+id/details_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_normal"
             android:layout_weight="1"
             android:src="@drawable/trump_server" />
 
@@ -32,6 +34,8 @@
             android:id="@+id/details_source_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_normal"
             android:layout_weight="1"
             android:src="@drawable/trump_selfie_photo" />
     </LinearLayout>
