@@ -7,6 +7,8 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
 import com.touchdown.muchface.MyApplication;
 import com.touchdown.muchface.R;
 import com.touchdown.muchface.domain.DetectionManager;
@@ -31,9 +34,11 @@ import com.touchdown.muchface.live.facedetectcamera.model.FaceResult;
 import com.touchdown.muchface.live.facedetectcamera.utils.CameraErrorCallback;
 import com.touchdown.muchface.live.facedetectcamera.utils.ImageUtils;
 import com.touchdown.muchface.live.facedetectcamera.utils.Util;
+
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+
 import nl.dionsegijn.konfetti.KonfettiView;
 
 /**
@@ -48,57 +53,49 @@ import nl.dionsegijn.konfetti.KonfettiView;
 public final class FaceDetectGrayActivity extends AppCompatActivity
     implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
+  public static final String TAG = FaceDetectGrayActivity.class.getSimpleName();
+  private static final int MAX_FACE = 10;
+  // Log all errors:
+  private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
+  // fps detect face (not FPS of camera)
+  long start, end;
+  int counter = 0;
+  double fps;
   // Number of Cameras in device.
   private int numberOfCameras;
-
-  public static final String TAG = FaceDetectGrayActivity.class.getSimpleName();
-
   private Camera mCamera;
   private int cameraId = 0;
-
   // Let's keep track of the display rotation and orientation also:
   private int mDisplayRotation;
   private int mDisplayOrientation;
-
   private int previewWidth;
   private int previewHeight;
-
   // The surface view for the camera data
   private SurfaceView mView;
-
   // Draw rectangles and other fancy stuff:
   private FaceOverlayView mFaceView;
-
-  // Log all errors:
-  private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
-
-  private static final int MAX_FACE = 10;
   private boolean isThreadWorking = false;
   private Handler handler;
   private FaceDetectThread detectThread = null;
   private int prevSettingWidth;
   private int prevSettingHeight;
   private android.media.FaceDetector fdet;
-
   private byte[] grayBuff;
   private int bufflen;
   private int[] rgbs;
-
   private FaceResult faces[];
   private FaceResult faces_previous[];
   private int Id = 0;
-
   private String BUNDLE_CAMERA_ID = "camera";
-
   //RecylerView face image
   private HashMap<Integer, Integer> facesCount = new HashMap<>();
-  private RecyclerView recyclerView;
-  private MatchResultAdapter mMatchResultAdapter;
-  private DetectionManager mDetectionManager;
 
   //==============================================================================================
   // Activity Methods
   //==============================================================================================
+  private RecyclerView recyclerView;
+  private MatchResultAdapter mMatchResultAdapter;
+  private DetectionManager mDetectionManager;
 
   /**
    * Initializes the UI and initiates the creation of a face detector.
@@ -167,6 +164,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
         super.onBackPressed();
         return true;
 
+
       case R.id.switchCam:
 
         if (numberOfCameras == 1) {
@@ -208,10 +206,16 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
           @Override
           public void run() {
             mMatchResultAdapter.add(source, details);
+            playRingtone();
           }
         });
       }
 
+      public void playRingtone() {
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        Uri ring1Uri = Uri.parse("1.mp3");
+        RingtoneManager.getRingtone(getApplicationContext(), sound).play();
+      }
       @Override
       public void onFailure(final Bitmap source) {
         Log.d("Balagan", "failure matching cropped");
@@ -398,11 +402,6 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     mCamera = null;
   }
 
-  // fps detect face (not FPS of camera)
-  long start, end;
-  int counter = 0;
-  double fps;
-
   @Override
   public void onPreviewFrame(byte[] _data, Camera _camera) {
     if (!isThreadWorking) {
@@ -429,6 +428,11 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
         e.printStackTrace();
       }
     }
+  }
+
+  private void sendCropForRecognition(Bitmap faceCropped) {
+    Log.d("Balagan", "sending cropped image for recognition");
+    mDetectionManager.send(faceCropped);
   }
 
   /**
@@ -600,10 +604,5 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
         ptr++;
       }
     }
-  }
-
-  private void sendCropForRecognition(Bitmap faceCropped) {
-    Log.d("Balagan", "sending cropped image for recognition");
-    mDetectionManager.send(faceCropped);
   }
 }
