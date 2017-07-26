@@ -20,6 +20,7 @@ public class MyApplication extends Application {
   private List<Bitmap> bitmaps;
   private List<PersonDetails> details;
   private List<String> names;
+  private Bitmap mBit;
 
   @Override
   public void onCreate() {
@@ -45,6 +46,14 @@ public class MyApplication extends Application {
 
   public DetectionManager getDetectionManager() {
     return mDetectionManager;
+  }
+
+  public void setBitmap(Bitmap bit) {
+    mBit = bit;
+  }
+
+  public Bitmap getBitmap() {
+    return mBit;
   }
 
   private class MyDetectionManager implements DetectionManager {
