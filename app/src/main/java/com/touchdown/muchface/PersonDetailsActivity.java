@@ -56,7 +56,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
     mSsnText.setText("SSN - " + details.getSsn());
     String birthDate = new SimpleDateFormat("dd-MM-yyyy").format(details.getBirthDate());
     mBirthDayText.setText("Birthday - " + birthDate);
-    mDescriptionText.setText("Description - " + details.getDescription());
+    mDescriptionText.setText(details.getDescription());
     Glide.with(this).load(details.getImageUrl()).into(mProfileImage);
   }
 

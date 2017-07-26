@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.touchdown.muchface.PersonDetailsActivity"
     >
@@ -12,14 +12,15 @@
       android:id="@+id/details_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Donald Trump"
       android:textColor="@color/black"
-      android:textSize="@dimen/font_size"
+      android:textSize="@dimen/font_size_big"
+      tools:text="Donald Trump"
       />
 
   <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="250dp"
+      android:layout_height="0dp"
+      android:layout_weight="1"
       android:orientation="horizontal"
       android:paddingTop="@dimen/padding_normal"
       >
@@ -31,20 +32,19 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         app:rb_color="#0099CC"
         app:rb_duration="3000"
-        app:rb_radius="32dp"
+        app:rb_radius="40dp"
         app:rb_rippleAmount="4"
         app:rb_scale="6"
         >
       <ImageView
           android:id="@+id/details_profile"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_margin="@dimen/margin_normal"
-          android:src="@drawable/trump_server"
+          android:scaleType="fitCenter"
+          tools:src="@drawable/ic_camera_alt_black_24dp"
           />
 
     </com.skyfishjy.library.RippleBackground>
@@ -57,55 +57,57 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         app:rb_color="@color/red_500"
         app:rb_duration="3000"
-        app:rb_radius="32dp"
+        app:rb_radius="40dp"
         app:rb_rippleAmount="4"
         app:rb_scale="6"
         >
       <ImageView
           android:id="@+id/details_source_image"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_margin="@dimen/margin_normal"
-          android:src="@drawable/trump_selfie_photo"
+          android:scaleType="fitCenter"
+          tools:src="@drawable/ic_camera_alt_black_24dp"
           />
     </com.skyfishjy.library.RippleBackground>
   </LinearLayout>
 
-  <TextView
+  <me.grantland.widget.AutofitTextView
       android:id="@+id/details_ssn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:maxLines="1"
       android:paddingTop="@dimen/padding_normal"
-      android:text="742775893"
       android:textAlignment="center"
       android:textColor="@color/black"
       android:textSize="@dimen/font_size"
+      tools:text="742775893"
       />
 
-  <TextView
+  <me.grantland.widget.AutofitTextView
       android:id="@+id/details_birth_date"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:maxLines="1"
       android:paddingTop="@dimen/padding_normal"
-      android:text="June 14, 1946 (age 71)"
       android:textAlignment="center"
       android:textColor="@color/black"
       android:textSize="@dimen/font_size"
+      tools:text="June 14, 1946 (age 71)"
       />
 
-  <TextView
+  <me.grantland.widget.AutofitTextView
       android:id="@+id/details_description"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:maxLines="2"
       android:paddingTop="@dimen/padding_normal"
-      android:text="Very nice man"
       android:textAlignment="center"
       android:textColor="@color/black"
       android:textSize="@dimen/font_size"
+      tools:text="Very nice man with very long long lo"
       />
 
 </LinearLayout>
