@@ -3,19 +3,14 @@ package com.touchdown.muchface;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.touchdown.muchface.domain.PersonDetails;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 
 public class PersonDetailsActivity extends AppCompatActivity {
@@ -62,7 +57,7 @@ public class PersonDetailsActivity extends AppCompatActivity {
         mDescriptionText.setText(details.getDescription());
         mNameText.setText(details.getName());
         mSourceImage.setImageBitmap(bitmap);
-        new LoadBitmapFromUrl(mProfileImage).execute(details.getImageUrl());
+        Glide.with(this).load(details.getImageUrl()).into(mProfileImage);
     }
 
     private PersonDetails extractPersonDetails() {
@@ -71,37 +66,5 @@ public class PersonDetailsActivity extends AppCompatActivity {
 
     private Bitmap extractSourceImage() {
         return getIntent().getParcelableExtra(IMAGE_EXTRA);
-    }
-
-    private class LoadBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
-
-        private ImageView mTargetView;
-
-        LoadBitmapFromUrl(ImageView targetView) {
-            mTargetView = targetView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                return getBitmapFromURL(params[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            mTargetView.setImageBitmap(bitmap);
-        }
-
-        private Bitmap getBitmapFromURL(String src) throws IOException {
-            HttpURLConnection connection = (HttpURLConnection) new URL(src).openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        }
     }
 }
