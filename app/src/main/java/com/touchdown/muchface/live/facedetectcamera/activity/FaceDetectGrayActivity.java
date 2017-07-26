@@ -34,6 +34,7 @@ import com.touchdown.muchface.live.facedetectcamera.utils.Util;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+import nl.dionsegijn.konfetti.KonfettiView;
 
 /**
  * Created by Nguyen on 5/20/2016.
@@ -115,15 +116,17 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     mFaceView = new FaceOverlayView(this);
     addContentView(mFaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT));
-    // Create and Start the OrientationListener:
 
+    KonfettiView konfettiView = (KonfettiView) findViewById(R.id.konfetti);
+
+    // Create and Start the OrientationListener:
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
     recyclerView.setLayoutManager(mLayoutManager);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-    mMatchResultAdapter = new MatchResultAdapter(this);
+    mMatchResultAdapter = new MatchResultAdapter(this, konfettiView);
     recyclerView.setAdapter(mMatchResultAdapter);
 
     handler = new Handler();

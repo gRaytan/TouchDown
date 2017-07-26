@@ -5,69 +5,107 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.touchdown.muchface.PersonDetailsActivity">
+    tools:context="com.touchdown.muchface.PersonDetailsActivity"
+    >
 
-    <TextView
-        android:id="@+id/details_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Donald Trump"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_size" />
+  <TextView
+      android:id="@+id/details_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Donald Trump"
+      android:textColor="@color/black"
+      android:textSize="@dimen/font_size"
+      />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/padding_normal">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="250dp"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/padding_normal"
+      >
 
-        <ImageView
-            android:id="@+id/details_profile"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/margin_normal"
-            android:layout_weight="1"
-            android:src="@drawable/trump_server" />
+    <com.skyfishjy.library.RippleBackground
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ripple1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        app:rb_color="#0099CC"
+        app:rb_duration="3000"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="4"
+        app:rb_scale="6"
+        >
+      <ImageView
+          android:id="@+id/details_profile"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_margin="@dimen/margin_normal"
+          android:src="@drawable/trump_server"
+          />
 
-        <ImageView
-            android:id="@+id/details_source_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/margin_normal"
-            android:layout_weight="1"
-            android:src="@drawable/trump_selfie_photo" />
-    </LinearLayout>
+    </com.skyfishjy.library.RippleBackground>
 
-    <TextView
-        android:id="@+id/details_ssn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_normal"
-        android:text="742775893"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_size" />
 
-    <TextView
-        android:id="@+id/details_birth_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_normal"
-        android:text="June 14, 1946 (age 71)"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_size" />
+    <com.skyfishjy.library.RippleBackground
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ripple2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        app:rb_color="@color/red_500"
+        app:rb_duration="3000"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="4"
+        app:rb_scale="6"
+        >
+      <ImageView
+          android:id="@+id/details_source_image"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_margin="@dimen/margin_normal"
+          android:src="@drawable/trump_selfie_photo"
+          />
+    </com.skyfishjy.library.RippleBackground>
+  </LinearLayout>
 
-    <TextView
-        android:id="@+id/details_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_normal"
-        android:text="Very nice man"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_size" />
+  <TextView
+      android:id="@+id/details_ssn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/padding_normal"
+      android:text="742775893"
+      android:textAlignment="center"
+      android:textColor="@color/black"
+      android:textSize="@dimen/font_size"
+      />
+
+  <TextView
+      android:id="@+id/details_birth_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/padding_normal"
+      android:text="June 14, 1946 (age 71)"
+      android:textAlignment="center"
+      android:textColor="@color/black"
+      android:textSize="@dimen/font_size"
+      />
+
+  <TextView
+      android:id="@+id/details_description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/padding_normal"
+      android:text="Very nice man"
+      android:textAlignment="center"
+      android:textColor="@color/black"
+      android:textSize="@dimen/font_size"
+      />
 
 </LinearLayout>

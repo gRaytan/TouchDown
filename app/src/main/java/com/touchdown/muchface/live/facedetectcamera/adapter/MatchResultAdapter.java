@@ -15,6 +15,9 @@ import com.touchdown.muchface.PersonDetailsActivity;
 import com.touchdown.muchface.R;
 import com.touchdown.muchface.domain.PersonDetails;
 import java.util.List;
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 
 public class MatchResultAdapter
     extends RecyclerView.Adapter<MatchResultAdapter.MatchResultViewHolder> {
@@ -23,9 +26,11 @@ public class MatchResultAdapter
   private final List<PersonDetails> details;
   private final List<String> names;
   private final Activity activity;
+  private final KonfettiView mKonfettiView;
 
-  public MatchResultAdapter(Activity activity) {
+  public MatchResultAdapter(Activity activity, KonfettiView konfettiView) {
     this.activity = activity;
+    mKonfettiView = konfettiView;
     MyApplication application = (MyApplication) activity.getApplication();
     this.bitmaps = application.getBitmaps();
     this.details = application.getDetails();
@@ -38,8 +43,29 @@ public class MatchResultAdapter
       updateExisting(bitmap, name);
     } else {
       addNew(bitmap, details, name);
+      if (details != PersonDetails.UNKNOWN) {
+        konfetti();
+      }
     }
     notifyDataSetChanged();
+  }
+
+  private void konfetti() {
+    mKonfettiView.build()
+        .addColors(getColor(R.color.konfetti1), getColor(R.color.konfetti2),
+            getColor(R.color.konfetti3), getColor(R.color.konfetti4), getColor(R.color.konfetti5))
+        .setDirection(290, 340)
+        .setSpeed(1f, 10f)
+        .setFadeOutEnabled(true)
+        .setTimeToLive(2000)
+        .addShapes(Shape.RECT, Shape.CIRCLE)
+        .addSizes(new Size(12, 5f))
+        .setPosition(0, mKonfettiView.getHeight())
+        .stream(300, 5000L);
+  }
+
+  private int getColor(int colorID) {
+    return activity.getColor(colorID);
   }
 
   private void updateExisting(Bitmap bitmap, String name) {
