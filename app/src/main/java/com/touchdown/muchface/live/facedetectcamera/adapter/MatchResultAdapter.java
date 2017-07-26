@@ -34,12 +34,24 @@ public class MatchResultAdapter
 
   public void add(Bitmap bitmap, PersonDetails details) {
     String name = details.getName();
-    if (names.contains(name) && details != PersonDetails.UNKNOWN) return;
+    if (names.contains(name) && details != PersonDetails.UNKNOWN) {
+      updateExisting(bitmap, name);
+    } else {
+      addNew(bitmap, details, name);
+    }
+    notifyDataSetChanged();
+  }
 
-    bitmaps.add(bitmap);
+  private void updateExisting(Bitmap bitmap, String name) {
+    int i = this.names.indexOf(name);
+    this.bitmaps.remove(i);
+    this.bitmaps.add(i, bitmap);
+  }
+
+  private void addNew(Bitmap bitmap, PersonDetails details, String name) {
+    this.bitmaps.add(bitmap);
     this.names.add(name);
     this.details.add(details);
-    notifyDataSetChanged();
   }
 
   public void add(Bitmap bitmap) {
