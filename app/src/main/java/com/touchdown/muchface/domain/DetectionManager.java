@@ -6,9 +6,11 @@ public interface DetectionManager {
 
   void send(Bitmap bitmap);
 
-  void setOnSuccessListener(OnSuccessListener listener);
+  void setOnResultListener(onResultListener listener);
 
-  interface OnSuccessListener {
+  interface onResultListener {
     void onSuccess(PersonDetails details, Bitmap source);
+
+    void onFailure(Bitmap source);
   }
 }

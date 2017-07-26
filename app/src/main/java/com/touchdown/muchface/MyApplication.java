@@ -3,11 +3,9 @@ package com.touchdown.muchface;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.util.Log;
-
 import com.touchdown.muchface.domain.DetectionManager;
 import com.touchdown.muchface.domain.PersonDetails;
 import com.touchdown.muchface.util.ApiUtils;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,8 +29,7 @@ public class MyApplication extends Application {
 
   private class MyDetectionManager implements DetectionManager {
 
-    private OnSuccessListener mListener;
-    private long mLastFireTime = 0;
+    private onResultListener mListener;
     private ExecutorService mExecutor =
         Executors.newFixedThreadPool(NUM_CONCURRENT_SENDING_THREADS);
 
@@ -48,19 +45,20 @@ public class MyApplication extends Application {
 
     private void doSend(Bitmap bitmap) {
       try {
-        long issueTime = System.currentTimeMillis();
         PersonDetails details = ApiUtils.createFaceDetector().getDetails(bitmap);
-        if (mListener != null && issueTime > mLastFireTime) {
-          mLastFireTime = System.currentTimeMillis();
+        if (mListener != null) {
           mListener.onSuccess(details, bitmap);
         }
       } catch (Exception e) {
         Log.w(LOG_TAG, "failed detecting bitmap", e);
+        if (mListener != null) {
+          mListener.onFailure(bitmap);
+        }
       }
     }
 
     @Override
-    public void setOnSuccessListener(OnSuccessListener listener) {
+    public void setOnResultListener(onResultListener listener) {
       mListener = listener;
     }
   }

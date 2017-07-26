@@ -19,22 +19,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import com.touchdown.muchface.MyApplication;
-import com.touchdown.muchface.PersonDetailsActivity;
 import com.touchdown.muchface.R;
 import com.touchdown.muchface.domain.DetectionManager;
 import com.touchdown.muchface.domain.PersonDetails;
 import com.touchdown.muchface.live.facedetectcamera.activity.ui.FaceOverlayView;
-import com.touchdown.muchface.live.facedetectcamera.adapter.ImagePreviewAdapter;
+import com.touchdown.muchface.live.facedetectcamera.adapter.MatchResultAdapter;
 import com.touchdown.muchface.live.facedetectcamera.model.FaceResult;
 import com.touchdown.muchface.live.facedetectcamera.utils.CameraErrorCallback;
 import com.touchdown.muchface.live.facedetectcamera.utils.ImageUtils;
 import com.touchdown.muchface.live.facedetectcamera.utils.Util;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,8 +92,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
   //RecylerView face image
   private HashMap<Integer, Integer> facesCount = new HashMap<>();
   private RecyclerView recyclerView;
-  private ImagePreviewAdapter imagePreviewAdapter;
-  private ArrayList<Bitmap> facesBitmap;
+  private MatchResultAdapter mMatchResultAdapter;
   private DetectionManager mDetectionManager;
 
   //==============================================================================================
@@ -122,9 +118,13 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     // Create and Start the OrientationListener:
 
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+    RecyclerView.LayoutManager mLayoutManager =
+        new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
     recyclerView.setLayoutManager(mLayoutManager);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+    mMatchResultAdapter = new MatchResultAdapter();
+    recyclerView.setAdapter(mMatchResultAdapter);
 
     handler = new Handler();
     faces = new FaceResult[MAX_FACE];
@@ -196,18 +196,28 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     Log.i(TAG, "onResume");
     startPreview();
 
-    mDetectionManager.setOnSuccessListener(new DetectionManager.OnSuccessListener() {
-
-      private boolean fired = false;
+    mDetectionManager.setOnResultListener(new DetectionManager.onResultListener() {
 
       @Override
-      public void onSuccess(PersonDetails details, Bitmap source) {
-        synchronized (mDetectionManager) {
-          if (!fired) {
-            PersonDetailsActivity.startActivity(FaceDetectGrayActivity.this, details, source);
+      public void onSuccess(final PersonDetails details, final Bitmap source) {
+        Log.d("Balagan", "onSuccess for " + details.toString());
+        mFaceView.post(new Runnable() {
+          @Override
+          public void run() {
+            mMatchResultAdapter.add(source, details);
           }
-          fired = true;
-        }
+        });
+      }
+
+      @Override
+      public void onFailure(final Bitmap source) {
+        Log.d("Balagan", "failure matching cropped");
+        mFaceView.post(new Runnable() {
+          @Override
+          public void run() {
+            mMatchResultAdapter.add(source);
+          }
+        });
       }
     });
   }
@@ -224,7 +234,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     }
 
     if (mDetectionManager != null) {
-      mDetectionManager.setOnSuccessListener(null);
+      mDetectionManager.setOnResultListener(null);
     }
   }
 
@@ -235,7 +245,6 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    resetData();
   }
 
   @Override
@@ -247,7 +256,6 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
   @Override
   public void surfaceCreated(SurfaceHolder surfaceHolder) {
     //Find the total number of cameras available
-    resetData();
 
     numberOfCameras = Camera.getNumberOfCameras();
     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -551,11 +559,6 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
                 faceCroped = ImageUtils.cropFace(faces[i], bitmap, rotate);
                 if (faceCroped != null) {
                   FaceDetectGrayActivity.this.sendCropForRecognition(faceCroped);
-                  handler.post(new Runnable() {
-                    public void run() {
-                      imagePreviewAdapter.add(faceCroped);
-                    }
-                  });
                 }
               }
             }
@@ -596,28 +599,8 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     }
   }
 
-  private void sendCropForRecognition(Bitmap faceCroped) {
+  private void sendCropForRecognition(Bitmap faceCropped) {
     Log.d("Balagan", "sending cropped image for recognition");
-    mDetectionManager.send(faceCroped);
-  }
-
-  /**
-   * Release Memory
-   */
-  private void resetData() {
-    if (imagePreviewAdapter == null) {
-      facesBitmap = new ArrayList<>();
-      imagePreviewAdapter = new ImagePreviewAdapter(FaceDetectGrayActivity.this, facesBitmap,
-          new ImagePreviewAdapter.ViewHolder.OnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-              imagePreviewAdapter.setCheck(position);
-              imagePreviewAdapter.notifyDataSetChanged();
-            }
-          });
-      recyclerView.setAdapter(imagePreviewAdapter);
-    } else {
-      imagePreviewAdapter.clearAll();
-    }
+    mDetectionManager.send(faceCropped);
   }
 }

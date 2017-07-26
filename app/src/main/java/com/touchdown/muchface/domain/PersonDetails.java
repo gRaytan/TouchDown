@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class PersonDetails implements Serializable {
 
+  public static PersonDetails UNKNOWN = new PersonDetails("Unknown", null, null, null, null);
+
   private final String name;
   private final String ssn;
   private final String imageUrl;
