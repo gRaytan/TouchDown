@@ -75,9 +75,15 @@ public class MatchResultAdapter
   }
 
   private void addNew(Bitmap bitmap, PersonDetails details, String name) {
-    this.bitmaps.add(bitmap);
-    this.names.add(name);
-    this.details.add(details);
+    if (details != PersonDetails.UNKNOWN) {
+      this.bitmaps.add(0, bitmap);
+      this.names.add(0, name);
+      this.details.add(0, details);
+    } else {
+      this.bitmaps.add(bitmap);
+      this.names.add(name);
+      this.details.add(details);
+    }
   }
 
   public void add(Bitmap bitmap) {
