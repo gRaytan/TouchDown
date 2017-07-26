@@ -1,5 +1,6 @@
 package com.touchdown.muchface.live.facedetectcamera.adapter;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.touchdown.muchface.MyApplication;
+import com.touchdown.muchface.PersonDetailsActivity;
 import com.touchdown.muchface.R;
 import com.touchdown.muchface.domain.PersonDetails;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MatchResultAdapter
@@ -19,14 +21,23 @@ public class MatchResultAdapter
 
   private final List<Bitmap> bitmaps;
   private final List<PersonDetails> details;
+  private final List<String> names;
+  private final Activity activity;
 
-  public MatchResultAdapter() {
-    this.bitmaps = new ArrayList<>();
-    this.details = new ArrayList<>();
+  public MatchResultAdapter(Activity activity) {
+    this.activity = activity;
+    MyApplication application = (MyApplication) activity.getApplication();
+    this.bitmaps = application.getBitmaps();
+    this.details = application.getDetails();
+    this.names = application.getNames();
   }
 
   public void add(Bitmap bitmap, PersonDetails details) {
+    String name = details.getName();
+    if (names.contains(name) && details != PersonDetails.UNKNOWN) return;
+
     bitmaps.add(bitmap);
+    this.names.add(name);
     this.details.add(details);
     notifyDataSetChanged();
   }
@@ -44,10 +55,19 @@ public class MatchResultAdapter
 
   @Override
   public void onBindViewHolder(MatchResultViewHolder holder, int position) {
-    holder.image.setImageBitmap(bitmaps.get(position));
-    PersonDetails personDetails = details.get(position);
+    final Bitmap bm = bitmaps.get(position);
+    holder.image.setImageBitmap(bm);
+    final PersonDetails personDetails = details.get(position);
     holder.text.setText(personDetails.getName());
     holder.layout.setBackgroundColor(getBGColor(personDetails));
+    holder.layout.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (personDetails != PersonDetails.UNKNOWN) {
+          PersonDetailsActivity.startActivity(activity, personDetails, bm);
+        }
+      }
+    });
   }
 
   @Override

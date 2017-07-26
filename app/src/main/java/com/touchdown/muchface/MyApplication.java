@@ -6,6 +6,8 @@ import android.util.Log;
 import com.touchdown.muchface.domain.DetectionManager;
 import com.touchdown.muchface.domain.PersonDetails;
 import com.touchdown.muchface.util.ApiUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,12 +17,30 @@ public class MyApplication extends Application {
   private static String LOG_TAG = MyApplication.class.getSimpleName();
 
   private DetectionManager mDetectionManager;
+  private List<Bitmap> bitmaps;
+  private List<PersonDetails> details;
+  private List<String> names;
 
   @Override
   public void onCreate() {
     super.onCreate();
 
     mDetectionManager = new MyDetectionManager();
+    bitmaps = new ArrayList<>();
+    details = new ArrayList<>();
+    names = new ArrayList<>();
+  }
+
+  public List<Bitmap> getBitmaps() {
+    return bitmaps;
+  }
+
+  public List<PersonDetails> getDetails() {
+    return details;
+  }
+
+  public List<String> getNames() {
+    return names;
   }
 
   public DetectionManager getDetectionManager() {

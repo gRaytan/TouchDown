@@ -123,7 +123,7 @@ public final class FaceDetectGrayActivity extends AppCompatActivity
     recyclerView.setLayoutManager(mLayoutManager);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-    mMatchResultAdapter = new MatchResultAdapter();
+    mMatchResultAdapter = new MatchResultAdapter(this);
     recyclerView.setAdapter(mMatchResultAdapter);
 
     handler = new Handler();
